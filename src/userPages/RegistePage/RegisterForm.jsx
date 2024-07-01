@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import registerValidate from "../../features/RegisterValidate";
-import Input from "../../component/Input";
-import Button from "../../component/Button";
-import userApi from "../../apis/userApi";
+import registerValidate from "../../../features/RegisterValidate";
+import Input from "../../../component/Input";
+import Button from "../../../component/Button";
+import userApi from "../../../apis/userApi";
 
 const initialInput = {
   firstName: "",

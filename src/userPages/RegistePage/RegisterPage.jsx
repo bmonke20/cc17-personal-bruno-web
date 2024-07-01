@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Button from "../../component/Button";
-import Modal from "../../component/Modal";
+import Button from "../../../component/Button";
+import Modal from "../../../component/Modal";
 import RegisterForm from "./RegisterForm";
 
 export default function RegisterPage() {

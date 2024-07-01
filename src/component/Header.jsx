@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { CartContext } from "../contexts/CartContext";
 import { Cart } from "../icon/Icon";
 import { Link } from "react-router-dom";
 import Dropdown from "./Dropdown";
@@ -7,6 +8,7 @@ import useAuth from "../hooks/useAuth";
 export default function Header() {
   const [isLogin, setIsLogin] = useState(false);
   const { logout, authUser } = useAuth();
+  const { cart } = useContext(CartContext);
 
   const handleLogin = () => {
     setIsLogin(true);
@@ -17,11 +19,17 @@ export default function Header() {
     logout();
   };
 
+  const countCartItems = () => {
+    return cart?.reduce((total, product) => total + product.quantity, 0) || 0;
+  };
+
   return (
     <div>
       <div className='bg-gradient-to-b from-[#415F6C] to-[#8DA1A9] w-full h-18 rounded-b-lg fixed top-0'>
         <div className='flex items-center justify-between py-3 px-4'>
-          <div className='text-[#D5DEE3] text-4xl font-bold'>BRUNO</div>
+          <Link to='/'>
+            <div className='text-[#D5DEE3] text-4xl font-bold'>BRUNO</div>
+          </Link>
           <div className='flex items-center gap-4'>
             <Link to='/' className='text-[#FFFFFF] font-semibold text-2xl'>
               Home
@@ -36,9 +44,12 @@ export default function Header() {
               About us
             </Link>
             <div className='relative'>
-              <Cart />
-              <div className='bg-[#F86158] w-6 h-6 top-6 right-0 rounded-full absolute flex items-center justify-center text-[#fff]'>
-                0
+              <Link to='/cart'>
+                <Cart />
+              </Link>
+              {/* แสดงตัวเลขจำนวนสินค้าที่มีในตะกร้า */}
+              <div className='bg-[#F86158] w-6 h-6 top-5 right-3 rounded-full absolute flex items-center justify-center text-[#fff]'>
+                {countCartItems()}
               </div>
             </div>
             {isLogin && authUser ? (

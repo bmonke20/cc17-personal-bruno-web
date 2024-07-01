@@ -2,8 +2,8 @@ export function Bin() {
   return (
     <svg
       fill='#000000'
-      width='69px'
-      height='69px'
+      width='40px'
+      height='40px'
       viewBox='-2.94 0 31.716 31.716'
       xmlns='http://www.w3.org/2000/svg'
     >
@@ -80,7 +80,7 @@ export function Cart() {
   );
 }
 
-export function Plus() {
+export function Plus({ onClick }) {
   return (
     <svg
       width='64px'
@@ -88,6 +88,8 @@ export function Plus() {
       viewBox='0 0 24 24'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
+      onClick={onClick}
+      style={{ cursor: "pointer" }}
     >
       <g id='SVGRepo_bgCarrier'></g>
       <g id='SVGRepo_tracerCarrier'></g>

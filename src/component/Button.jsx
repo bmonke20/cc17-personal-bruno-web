@@ -11,38 +11,36 @@ const borderButton = {
   blue: "border-solid border-2 border-[#415F6C]",
 };
 
-const colorButton = {
+const textColor = {
   white: "text-[#FFFFFF]",
   black: "text-[#0D1618]",
   gray: "text-[#40565C]",
 };
 
-const widthButton = {
-  32: "w-32",
-  full: "w-full",
-  20: "w-20",
-};
-
-const hButton = {
-  h10: "h-10",
-  h12: "h-12",
-};
-
 export default function Button({
   children,
   bg = "blue",
-  border = "none",
+  border,
   color = "black",
   width,
   onClick,
   type,
   height,
+  fontSize = "text-base",
+  fontWeight = "font-normal",
 }) {
+  const widthClass = width ? `w-[${width}px]` : "";
+  const heightClass = height ? `h-[${height}px]` : "";
+
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`px-4 py-2 rounded-full ${bgButton[bg]} ${borderButton[border]} ${colorButton[color]} ${widthButton[width]} ${hButton[height]}`}
+      className={`px-4 py-2 rounded-full ${bgButton[bg]} ${
+        border ? borderButton[border] : ""
+      } ${widthClass} ${heightClass} ${
+        textColor[color]
+      } ${fontSize} ${fontWeight}`}
     >
       {children}
     </button>

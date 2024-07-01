@@ -1,61 +1,61 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
+import { CartContext } from "../contexts/CartContext";
 import productApi from "../apis/productApi";
 import { Plus } from "../icon/Icon";
 
 export default function ProductBox() {
-  const [product, setProduct] = useState([]);
-  const [filterProduct, setFilterProduct] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const { addToCart } = useContext(CartContext);
   const location = useLocation();
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProducts = async () => {
       try {
         const response = await productApi.getAllProduct();
-        setProduct(response);
+        setProducts(response);
       } catch (err) {
-        console.log("fetch error-----------------", err);
+        console.log("Fetch error:", err);
       }
     };
-    fetchProduct();
+    fetchProducts();
   }, []);
 
   useEffect(() => {
     const path = location.pathname.split("/");
     const productType = path[path.length - 1].toUpperCase();
     if (["TOP", "BOTTOM", "ACCESSORIES"].includes(productType)) {
-      setFilterProduct(
-        product.filter((product) => product.productType === productType)
+      setFilteredProducts(
+        products.filter((product) => product.productType === productType)
       );
     } else {
-      setFilterProduct(product);
+      setFilteredProducts(products);
     }
-  }, [location.pathname, product]);
+  }, [location.pathname, products]);
 
   return (
-    <div>
-      <div className='flex flex-grow min-h-screen'>
-        <div className='p-4 grid grid-cols-4 gap-4 w-full mx-4 items-start place-items-center'>
-          {filterProduct.map((product) => (
-            <div
-              key={product.id}
-              className='w-4/5 rounded-xl hover:shadow-md hover:border-[#73979F] hover:border-2 h-fit p-8 flex flex-col justify-between'
-            >
-              <div className='flex justify-end -mt-4 -mr-4'>
-                <Plus />
-              </div>
-              <img
-                src={product.productImage}
-                alt={product.productName}
-                className=' h-[280px]'
-              />
-              <div className='flex justify-between items-center m-4 text-xl'>
-                <h1 className='text-xl font-semibold'>{product.productName}</h1>
-                <h1 className='text-xl font-semibold'>{product.price} Bath</h1>
-              </div>
+    <div className='flex flex-grow min-h-screen'>
+      <div className='p-4 grid grid-cols-4 gap-4 w-full mx-4 items-start place-items-center'>
+        {filteredProducts.map((product) => (
+          <div
+            key={product.id}
+            className='w-4/5 rounded-xl hover:shadow-md hover:border-[#73979F] hover:border-2 h-fit p-8 flex flex-col justify-between'
+          >
+            <div className='flex justify-end -mt-4 -mr-4'>
+              <Plus onClick={() => addToCart(product)} />
             </div>
-          ))}
-        </div>
+            <img
+              src={product.productImage}
+              alt={product.productName}
+              className='h-[260px] w-[400px]'
+            />
+            <div className='flex justify-between items-center m-4 text-xl'>
+              <h1>{product.productName}</h1>
+              <h1>{product.price} Bath</h1>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

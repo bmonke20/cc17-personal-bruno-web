@@ -7,7 +7,7 @@ export default function OrderHistoryForm() {
   return (
     <>
       <div>
-        <div className='bg-[#F8FCFF] mt-20 h-full pb-8 '>
+        <div className='bg-[#F8FCFF] mt-20 min-h-[90vh] pb-8 '>
           <div className='p-4 flex items-center'>
             <div className='flex justify-center bg-[#A3B4BB] m-4 p-6 rounded-xl w-52 '>
               <h1 className='text-[#26363A] font-semibold text-4xl'>History</h1>
@@ -28,16 +28,17 @@ export default function OrderHistoryForm() {
               </div>
             </div>
           </div>
-        </div>
-        <div className='mt-4 mx-40'>
-          <Button
-            width='full'
-            bg='yellow'
-            border='none'
-            onClick={() => navigate("/")}
-          >
-            <div className='text-2xl font-semibold'>BACK TO HOME</div>
-          </Button>
+          <div className='mt-4 mx-40 text-end'>
+            <Button
+              className=''
+              fontSize='text-2xl'
+              fontWeight='font-semibold'
+              bg='yellow'
+              onClick={() => navigate("/")}
+            >
+              BACK TO HOME
+            </Button>
+          </div>
         </div>
       </div>
     </>

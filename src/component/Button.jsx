@@ -22,25 +22,19 @@ export default function Button({
   bg = "blue",
   border,
   color = "black",
-  width,
+  className = "",
   onClick,
   type,
-  height,
   fontSize = "text-base",
   fontWeight = "font-normal",
 }) {
-  const widthClass = width ? `w-[${width}px]` : "";
-  const heightClass = height ? `h-[${height}px]` : "";
-
   return (
     <button
       type={type}
       onClick={onClick}
       className={`px-4 py-2 rounded-full ${bgButton[bg]} ${
         border ? borderButton[border] : ""
-      } ${widthClass} ${heightClass} ${
-        textColor[color]
-      } ${fontSize} ${fontWeight}`}
+      } ${textColor[color]} ${fontSize} ${fontWeight} ${className}`}
     >
       {children}
     </button>

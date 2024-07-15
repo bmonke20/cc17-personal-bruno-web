@@ -1,21 +1,25 @@
-import { Suspense } from "react";
-import { ToastContainer } from "react-toastify";
+import { Slide, ToastContainer } from "react-toastify";
 import AuthContextProvider from "./contexts/AuthContext";
 import Router from "./routes";
+import { CartContextProvider } from "./contexts/CartContext";
+import { Suspense } from "react";
+import Spinner from "./component/Spinner";
 
 function App() {
   return (
     <>
-      <AuthContextProvider>
-        <Suspense>
-          <Router />
-          <ToastContainer
-            position='bottom-right'
-            autoClose={3000}
-            hideProgressBar
-          />
-        </Suspense>
-      </AuthContextProvider>
+      <Suspense fallback={<Spinner />}>
+        <CartContextProvider>
+          <AuthContextProvider>
+            <Router />
+            <ToastContainer
+              position='bottom-right'
+              autoClose={2000}
+              transition={Slide}
+            />
+          </AuthContextProvider>
+        </CartContextProvider>
+      </Suspense>
     </>
   );
 }

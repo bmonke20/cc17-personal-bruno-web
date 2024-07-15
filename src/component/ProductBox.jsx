@@ -1,14 +1,14 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { CartContext } from "../contexts/CartContext";
-import productApi from "../apis/productApi";
 import { Plus } from "../icon/Icon";
+import useCart from "../hooks/useCart";
+import productApi from "../apis/productApi";
 
 export default function ProductBox() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const { addToCart } = useContext(CartContext);
   const location = useLocation();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProducts = async () => {

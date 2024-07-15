@@ -1,152 +1,175 @@
-// import { useContext, useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { CartContext } from "../../contexts/CartContext";
+// import { useState } from "react";
 // import Button from "../../component/Button";
-// import { Bin } from "../../icon/Icon";
-// import cartApi from "../../apis/cartApi";
+// import Modal from "../../component/Modal";
+// import PaymentPage from "../PaymentPage/PaymentPage";
+// import CartProduct from "./CartProduct";
+// import useCart from "../../hooks/useCart";
 
 // export default function CartPage() {
-//   const { cart, removeFromCart, increase, decrease, setCart } =
-//     useContext(CartContext);
-//   const navigate = useNavigate();
+//   const { cartItems, getTotalPrice, clearCart } = useCart();
 
-//   useEffect(() => {
-//     fetchCart(); // เรียกใช้ fetchCart เมื่อ cart เปลี่ยนแปลง
-//   }, [cart]); // ระบุ cart เป็น dependency เพื่อให้ useEffect เรียกใช้หลังจาก cart เปลี่ยนแปลง
+//   const [open, setOpen] = useState(false);
 
-//   const handleRemove = (id) => {
-//     removeFromCart(id);
-//   };
-
-//   const handleIncrease = (id) => {
-//     increase(id);
-//   };
-
-//   const handleDecrease = (id) => {
-//     decrease(id);
-//   };
-
-//   const calculateProduct = (product) => {
-//     if (!product || isNaN(product.price) || isNaN(product.quantity)) {
-//       return 0;
-//     }
-//     return product.price * product.quantity;
-//   };
-
-//   const calculateTotal = () => {
-//     return cart.reduce((total, product) => {
-//       const productTotal = calculateProduct(product);
-//       return total + (isNaN(productTotal) ? 0 : productTotal);
-//     }, 0);
-//   };
-
-//   const fetchCart = async () => {
-//     try {
-//       const cartItems = await cartApi.getCart();
-//       setCart(cartItems); // อัปเดต cart จากข้อมูลที่ได้รับจาก API
-//     } catch (err) {
-//       console.error("Error fetching cart:", err);
-//       setCart([]); // หากเกิดข้อผิดพลาดในการดึงข้อมูลตะกร้าให้ตั้งค่า cart เป็น array เปล่า
-//     }
-//   };
+//   const totalQuantity = cartItems.reduce(
+//     (total, product) => total + product.quantity,
+//     0
+//   );
 
 //   return (
 //     <div>
-//       <div className='bg-[#F8FCFF] mt-20 h-full pb-8'>
-//         <div className='p-4 flex items-center'>
-//           <div className='flex justify-center bg-[#A3B4BB] m-4 p-6 rounded-xl w-40'>
-//             <h1 className='text-[#26363A] font-semibold text-4xl'>Cart</h1>
-//           </div>
-//         </div>
-//         <div className='w-4/5 rounded-xl border-2 border-[#73979F] h-fit p-8 mx-auto text-xl shadow-md'>
-//           {cart.length > 0 ? (
-//             cart.map(
-//               (product) =>
-//                 product.quantity > 0 && (
-//                   <div
-//                     key={product.id}
-//                     className='flex items-center justify-between mx-4'
-//                   >
-//                     <div className='flex items-center'>
-//                       <div>
-//                         <img
-//                           src={product.productImage}
-//                           alt={product.productName}
-//                           className='h-48 w-56 object-contain'
-//                         />
-//                       </div>
-//                       <div className='mx-8'>
-//                         <div>Product Name: {product.productName}</div>
-//                         <div className='flex gap-4'>
-//                           <span>Quantity : </span>
-//                           <span>
-//                             <button
-//                               onClick={() => handleDecrease(product.id)}
-//                               className='border border-gray-400 rounded px-2'
-//                             >
-//                               -
-//                             </button>
-//                           </span>
-//                           <span>{product.quantity}</span>
-//                           <span>
-//                             <button
-//                               onClick={() => handleIncrease(product.id)}
-//                               className='border border-gray-400 rounded px-2'
-//                             >
-//                               +
-//                             </button>
-//                           </span>
-//                           <span>pcs</span>
-//                         </div>
-//                         <div>
-//                           Price: {calculateProduct(product)} <span>Bath</span>
-//                         </div>
-//                       </div>
-//                     </div>
-//                     <div
-//                       role='button'
-//                       className='hover:bg-[#D5DEE3] rounded-full p-2'
-//                       onClick={() => handleRemove(product.id)}
-//                     >
-//                       <Bin />
-//                     </div>
-//                   </div>
-//                 )
-//             )
-//           ) : (
-//             <div className='text-center'>
-//               <p>Your cart is empty.</p>
-//               <Button
-//                 width={400}
-//                 bg='yellow'
-//                 border='none'
-//                 fontSize='text-2xl'
-//                 fontWeight='font-semibold'
-//                 onClick={() => navigate("/payment")}
-//               >
-//                 Payment
-//               </Button>
+//       <div className='bg-[#F8FCFF] mt-20 min-h-[90vh] pb-8'>
+//         <div className='p-4'>
+//           <div className='flex justify-between items-center'>
+//             <div className='flex justify-center bg-[#A3B4BB] m-4 p-6 rounded-xl w-40'>
+//               <h1 className='text-[#26363A] font-semibold text-4xl'>Cart</h1>
 //             </div>
+//             <span
+//               className='underline text-[#40565C] cursor-pointer px-10'
+//               onClick={clearCart}
+//             >
+//               clear cart
+//             </span>
+//           </div>
+//           <div className='flex flex-col gap-4'>
+//             {cartItems.length > 0 ? (
+//               cartItems.map((product) => (
+//                 <CartProduct key={product.id} product={product} />
+//               ))
+//             ) : (
+//               <div className='text-center text-2xl font-semibold'>
+//                 Your cart is empty
+//               </div>
+//             )}
+//           </div>
+
+//           {cartItems.length > 0 && (
+//             <>
+//               <div>
+//                 <div className='text-2xl font-semibold text-right mx-40 mt-4'>
+//                   Quantity : {totalQuantity} PCS
+//                 </div>
+//                 <div className='text-2xl font-semibold text-right mx-40 mt-4'>
+//                   Total Price : {getTotalPrice()} Bath
+//                 </div>
+//               </div>
+
+//               <div className='mt-4 mx-40 text-end'>
+//                 <Button
+//                   className='w-40'
+//                   fontSize='text-2xl'
+//                   fontWeight='font-semibold'
+//                   bg='yellow'
+//                   border='none'
+//                   onClick={() => setOpen(true)}
+//                 >
+//                   Payment
+//                 </Button>
+//               </div>
+//             </>
 //           )}
 //         </div>
-//         {cart.length > 0 && (
-//           <div className='mt-8 flex justify-center'>
-//             <Button
-//               width={400}
-//               bg='yellow'
-//               border='none'
-//               fontSize='text-2xl'
-//               fontWeight='font-semibold'
-//               onClick={() => navigate("/payment")}
-//             >
-//               Payment
-//             </Button>
-//           </div>
-//         )}
-//         <div className='text-2xl font-semibold text-right mx-8 mt-4'>
-//           Total Price: {calculateTotal()} <span>Bath</span>
-//         </div>
 //       </div>
+
+//       {open && (
+//         <Modal open={open} onClose={() => setOpen(false)} width={60}>
+//           <PaymentPage />
+//         </Modal>
+//       )}
 //     </div>
 //   );
 // }
+
+import { useState } from "react";
+import Button from "../../component/Button";
+import Modal from "../../component/Modal";
+import PaymentPage from "../PaymentPage/PaymentPage";
+import CartProduct from "./CartProduct";
+import useCart from "../../hooks/useCart";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+
+export default function CartPage() {
+  const { cartItems, getTotalPrice, clearCart } = useCart();
+  const { authUser } = useAuth(); // Get authUser from AuthContext
+  const navigate = useNavigate(); // Use useNavigate hook for navigation
+
+  const [open, setOpen] = useState(false);
+
+  const totalQuantity = cartItems.reduce(
+    (total, product) => total + product.quantity,
+    0
+  );
+
+  const handlePayment = () => {
+    if (authUser) {
+      setOpen(true); // Open modal if user is authenticated
+    } else {
+      // Redirect to login page
+      console.log("User is not logged in. Redirecting to login page...");
+      navigate("/login"); // Navigate to the login page
+    }
+  };
+
+  return (
+    <div>
+      <div className='bg-[#F8FCFF] mt-20 min-h-[90vh] pb-8'>
+        <div className='p-4'>
+          <div className='flex justify-between items-center'>
+            <div className='flex justify-center bg-[#A3B4BB] m-4 p-6 rounded-xl w-40'>
+              <h1 className='text-[#26363A] font-semibold text-4xl'>Cart</h1>
+            </div>
+            <span
+              className='underline text-[#40565C] cursor-pointer px-10'
+              onClick={clearCart}
+            >
+              clear cart
+            </span>
+          </div>
+          <div className='flex flex-col gap-4'>
+            {cartItems.length > 0 ? (
+              cartItems.map((product) => (
+                <CartProduct key={product.id} product={product} />
+              ))
+            ) : (
+              <div className='text-center text-2xl font-semibold'>
+                Your cart is empty
+              </div>
+            )}
+          </div>
+
+          {cartItems.length > 0 && (
+            <>
+              <div>
+                <div className='text-2xl font-semibold text-right mx-40 mt-4'>
+                  Quantity : {totalQuantity} PCS
+                </div>
+                <div className='text-2xl font-semibold text-right mx-40 mt-4'>
+                  Total Price : {getTotalPrice()} Bath
+                </div>
+              </div>
+
+              <div className='mt-4 mx-40 text-end'>
+                <Button
+                  className='w-40'
+                  fontSize='text-2xl'
+                  fontWeight='font-semibold'
+                  bg='yellow'
+                  border='none'
+                  onClick={handlePayment} // Use handlePayment function
+                >
+                  Payment
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {open && (
+        <Modal open={open} onClose={() => setOpen(false)} width={60}>
+          <PaymentPage />
+        </Modal>
+      )}
+    </div>
+  );
+}

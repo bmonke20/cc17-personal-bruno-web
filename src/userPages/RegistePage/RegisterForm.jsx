@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import registerValidate from "../../../features/RegisterValidate";
-import Input from "../../../component/Input";
-import Button from "../../../component/Button";
-import userApi from "../../../apis/userApi";
+import Input from "../../component/Input";
+import Button from "../../component/Button";
+import registerValidate from "../../features/validator/RegisterValidate";
+import userApi from "../../apis/userApi";
+import { useNavigate } from "react-router-dom";
 
 const initialInput = {
   firstName: "",
@@ -27,6 +28,7 @@ const initialInputError = {
 export default function RegisterForm({ onSuccess }) {
   const [input, setInput] = useState(initialInput);
   const [inputError, setInputError] = useState(initialInputError);
+  const navigate = useNavigate();
 
   const handleChangeInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -44,7 +46,14 @@ export default function RegisterForm({ onSuccess }) {
 
       setInputError({ ...initialInput });
 
-      await userApi.register(input);
+      const response = await userApi.register(input);
+
+      if (response.data.isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+
       onSuccess();
       toast.success("register success");
     } catch (err) {
@@ -142,8 +151,13 @@ export default function RegisterForm({ onSuccess }) {
           />
         </div>
         <div className='col-span-2 text-center'>
-          <Button bg='lightYellow' border='yellow' width='full' type='submit'>
-            <h1>Create Account</h1>
+          <Button
+            className='w-full'
+            bg='lightYellow'
+            border='yellow'
+            type='submit'
+          >
+            Create Account
           </Button>
         </div>
       </div>

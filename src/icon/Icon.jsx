@@ -1,6 +1,7 @@
-export function Bin() {
+export function Bin({ className }) {
   return (
     <svg
+      className={className}
       fill='#000000'
       width='40px'
       height='40px'
@@ -25,8 +26,8 @@ export function Bin() {
 export function Upload() {
   return (
     <svg
-      width='91px'
-      height='91px'
+      width='60px'
+      height='60px'
       viewBox='0 0 24 24'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
@@ -187,8 +188,8 @@ export function Instagram() {
   return (
     <svg
       fill='#000000'
-      width='144px'
-      height='144px'
+      width='50px'
+      height='50px'
       viewBox='0 0 32 32'
       id='Camada_1'
       version='1.1'
@@ -210,8 +211,8 @@ export function Instagram() {
 export function Email() {
   return (
     <svg
-      width='148px'
-      height='148px'
+      width='100px'
+      height='100px'
       viewBox='0 0 24 24'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
@@ -233,8 +234,8 @@ export function Line() {
   return (
     <svg
       fill='#000000'
-      height='129px'
-      width='129px'
+      height='50px'
+      width='50px'
       version='1.1'
       id='Capa_1'
       xmlns='http://www.w3.org/2000/svg'
@@ -259,8 +260,8 @@ export function Youtube() {
   return (
     <svg
       fill='#000000'
-      height='151px'
-      width='151px'
+      height='50px'
+      width='50px'
       version='1.1'
       id='Capa_1'
       xmlns='http://www.w3.org/2000/svg'

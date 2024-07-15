@@ -4,16 +4,18 @@ import TopPage from "../userPages/ProductPage/TopPage";
 import BottomPage from "../userPages/ProductPage/BottomPage";
 import AccessoriesPage from "../userPages/ProductPage/Accessories";
 import ProductPage from "../userPages/ProductPage/ProductPage";
-import CartPage from "../userPages/CartPage/CartPage";
 import PaymentPage from "../userPages/PaymentPage/PaymentPage";
 import ProfilePage from "../userPages/ProfilePage/ProfilePage";
-import AdminHomePage from "../adminPages/HomePage/AdminHomePage";
+import CartPage from "../userPages/CartPage/CartPage";
+import AdminProduct from "../adminPages/Product/AdminProduct";
+import AdminDashboard from "../adminPages/Dashboard/AdminDashboard";
+import OrderHistoryForm from "../userPages/HistoryPage/OrderHistory";
+import About from "../userPages/AboutPage/About";
 
 const LoginPage = lazy(() => import("../userPages/LoginPage/LoginPage"));
 const HomePage = lazy(() => import("../userPages/HomePage/HomePage"));
 const MainContainer = lazy(() => import("../component/MainContainer"));
 const AdminContainer = lazy(() => import("../component/AdminContainer"));
-const AdminLogin = lazy(() => import("../adminPages/LoginPage/AdminLogin"));
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,7 @@ const router = createBrowserRouter([
     element: <MainContainer />,
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/login", element: <LoginPage /> },
       {
         path: "/product",
         element: <ProductPage />,
@@ -30,19 +33,22 @@ const router = createBrowserRouter([
           { path: "accessories", element: <AccessoriesPage /> },
         ],
       },
-      { path: "/cart", element: <CartPage /> },
+      { path: "payment", element: <PaymentPage /> },
+      { path: "profile/:userId", element: <ProfilePage /> },
+      { path: "cart", element: <CartPage /> },
+      { path: "order", element: <OrderHistoryForm /> },
+      { path: "about", element: <About /> },
     ],
   },
-  { path: "/login", element: <LoginPage /> },
-  { path: "/payment", element: <PaymentPage /> },
-  { path: "/profile", element: <ProfilePage /> },
 
   {
     path: "/admin",
     element: <AdminContainer />,
-    children: [{ path: "/", element: <AdminHomePage /> }],
+    children: [
+      { path: "", element: <AdminDashboard /> },
+      { path: "product", element: <AdminProduct /> },
+    ],
   },
-  { path: "/admin/login", element: <AdminLogin /> },
 ]);
 
 export default function Router() {

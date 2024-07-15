@@ -1,36 +1,72 @@
-// import { createContext, useState, useEffect } from "react";
-// import cartApi from "../apis/cartApi";
+import { createContext, useState } from "react";
 
-// export const CartContext = createContext();
+export const CartContext = createContext();
 
-// export default function CartContextProvider({ children }) {
-//   const [cart, setCart] = useState([]);
+export const CartContextProvider = ({ children }) => {
+  const [cartItems, setCartItems] = useState([]);
 
-//   useEffect(() => {
-//     fetchCart();
-//   }, []);
+  const addToCart = (product) => {
+    setCartItems((prevItems) => {
+      const existingProduct = prevItems.find((item) => item.id === product.id);
+      if (existingProduct) {
+        return prevItems.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prevItems, { ...product, quantity: 1 }];
+    });
+  };
 
-//   const fetchCart = async () => {
-//     try {
-//       const cartItems = await cartApi.getCart();
-//       setCart(cartItems); // ปรับปรุงให้ตั้งค่า cart ด้วยข้อมูลที่ได้รับจาก API
-//     } catch (err) {
-//       console.error("Error fetching cart:", err);
-//       setCart([]); // หากเกิดข้อผิดพลาดในการดึงข้อมูลตะกร้าให้ตั้งค่า cart เป็น array เปล่า
-//     }
-//   };
+  const removeFromCart = (productId) => {
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.id !== productId)
+    );
+  };
 
-//   // ฟังก์ชันอื่น ๆ เช่น addToCart, removeFromCart, increase, decrease ควรจะเพิ่มหรือแก้ไขตามที่ต้องการ
-//   // ...
+  const increaseQuantity = (productId) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
 
-//   return (
-//     <CartContext.Provider
-//       value={{
-//         cart,
-//         // ใส่ฟังก์ชันอื่น ๆ ที่เกี่ยวข้องกับการจัดการตะกร้าที่นี่
-//       }}
-//     >
-//       {children}
-//     </CartContext.Provider>
-//   );
-// }
+  const decreaseQuantity = (productId) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === productId && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+  const getTotalPrice = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  };
+
+  return (
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        increaseQuantity,
+        decreaseQuantity,
+        clearCart,
+        getTotalPrice,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+};

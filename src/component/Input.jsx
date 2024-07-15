@@ -18,7 +18,7 @@ export default function Input({
   type = "text",
   name,
   border,
-  bg,
+  bg = "lightBlue",
   text,
   value,
   onChange,

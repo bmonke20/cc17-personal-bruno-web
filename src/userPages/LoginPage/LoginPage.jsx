@@ -2,12 +2,12 @@ import { useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import Input from "../../../component/Input";
-import Button from "../../../component/Button";
-import Header from "../../../component/Header";
+import Input from "../../component/Input";
+import Button from "../../component/Button";
+import useAuth from "../../hooks/useAuth";
+import loginValidate from "../../features/validator/LoginValidate";
+import Header from "../../component/Header";
 import RegisterPage from "../RegistePage/RegisterPage";
-import loginValidate from "../../../features/LoginValidate";
-import useAuth from "../../../hooks/useAuth";
 
 const initialInput = {
   identify: "",
@@ -19,7 +19,7 @@ const initialInputError = {
   password: "",
 };
 
-export default function LoginPage() {
+export default function LoginForm() {
   const [input, setInput] = useState(initialInput);
   const [inputError, setInputError] = useState(initialInputError);
 

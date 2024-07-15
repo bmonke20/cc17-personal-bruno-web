@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Input from "../../component/Input";
 
+import Button from "../../component/Button";
+import { toast } from "react-toastify";
+
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [form, setForm] = useState({
@@ -9,6 +12,8 @@ export default function ProfilePage() {
     lastName: "",
     username: "",
     email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [edit, setEdit] = useState(false);
@@ -48,25 +53,31 @@ export default function ProfilePage() {
 
       setUser(response.data.user);
       setEdit(false);
+      toast.success("Update success");
     } catch (err) {
       console.log(err);
     }
   };
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <div>
-      <div className='bg-[#F8FCFF] mt-20 h-full pb-8 '>
+      <div className='bg-[#F8FCFF] mt-20 min-h-[90vh] pb-8'>
         <div className='p-4 flex items-center'>
-          <div className='flex justify-center bg-[#A3B4BB] m-4 p-6 rounded-xl w-40 '>
+          <div className='flex justify-center bg-[#A3B4BB] m-4 p-6 rounded-xl w-40'>
             <h1 className='text-[#26363A] font-semibold text-4xl'>Profile</h1>
           </div>
         </div>
-        <div className='w-3/5 rounded-xl border-2 border-[#73979F] h-fit p-8 mx-auto text-xl shadow-md text-balance'>
+        <div className='w-1/4 rounded-xl border-2 border-[#73979F] h-fit p-8 mx-auto text-xl shadow-md text-balance'>
           {edit ? (
-            <form onSubmit={handleSubmit}>
+            <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
               <div>
-                <label>First name: </label>
+                <label className='text-[#415F6C]'>First name:</label>
                 <Input
+                  border='blue'
                   type='text'
                   name='firstName'
                   value={form.firstName}
@@ -74,8 +85,9 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label>Last name: </label>
+                <label className='text-[#415F6C]'>Last name:</label>
                 <Input
+                  border='blue'
                   type='text'
                   name='lastName'
                   value={form.lastName}
@@ -83,8 +95,9 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label>Username: </label>
+                <label className='text-[#415F6C]'>Username:</label>
                 <Input
+                  border='blue'
                   type='text'
                   name='username'
                   value={form.username}
@@ -92,14 +105,16 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label>Email: </label>
+                <label className='text-[#415F6C]'>Email:</label>
                 <Input
+                  border='blue'
                   type='email'
                   name='email'
                   value={form.email}
                   onChange={handleChange}
                 />
               </div>
+
               <div className='flex justify-center gap-8 mt-8'>
                 <button
                   className='border-2 px-4 py-2 rounded-full border-[#415F6C]'
@@ -130,13 +145,16 @@ export default function ProfilePage() {
               <div>
                 <span>Email: {user.email}</span>
               </div>
-              <div className=' flex justify-center mt-8'>
-                <button
-                  className='border-2 p-2 rounded-full border-[#C1D547]'
+              <div className='flex justify-center mt-8'>
+                <Button
+                  fontSize='text-lg'
+                  fontWeight='font-semibold'
+                  bg='none'
+                  border='yellow'
                   onClick={() => setEdit(true)}
                 >
                   Edit Profile
-                </button>
+                </Button>
               </div>
             </>
           )}
@@ -144,4 +162,46 @@ export default function ProfilePage() {
       </div>
     </div>
   );
+}
+
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+// const [showPassword, setShowPassword] = useState(false);
+{
+  /* <div>
+                <label className='text-[#415F6C]'>Change password:</label>
+                <div className='flex items-center'>
+                  <Input
+                    border='blue'
+                    type={showPassword ? "text" : "password"}
+                    name='password'
+                    value={form.password}
+                    onChange={handleChange}
+                  />
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className='ml-2 cursor-pointer text-gray-500'
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                </div>
+              </div> */
+}
+{
+  /* <div>
+                <label className='text-[#415F6C]'>Confirm password:</label>
+                <div className='flex items-center'>
+                  <Input
+                    border='blue'
+                    type={showPassword ? "text" : "password"}
+                    name='confirmPassword'
+                    value={form.confirmPassword}
+                    onChange={handleChange}
+                  />
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className='ml-2 cursor-pointer text-gray-500'
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                </div>
+              </div> */
 }

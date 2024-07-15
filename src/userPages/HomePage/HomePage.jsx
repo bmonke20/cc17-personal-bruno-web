@@ -16,7 +16,7 @@ export default function HomePage() {
 
   return (
     <>
-      <div className='bg-[#E5ECF0] w-full h-screen '>
+      <div className='bg-[#E5ECF0] w-full h-[90vh] '>
         <div className='gap-4'>
           <div className='h-screen'>
             <div className='bg-gradient-to-t from-[#7F949E]  via-[#415F6C] to-[#7F949E] flex mt-24  h-full rounded-xl'>

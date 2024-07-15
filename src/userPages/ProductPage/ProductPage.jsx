@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import Button from "../../component/Button";
-import Header from "../../component/Header";
 import ProductBox from "../../component/ProductBox";
 import TopPage from "./TopPage";
 import BottomPage from "./BottomPage";
@@ -29,8 +28,7 @@ export default function ProductPage() {
 
   return (
     <div>
-      <Header />
-      <div className='bg-[#F8FCFF] mt-24 h-full'>
+      <div className='bg-[#F8FCFF] mt-20 h-full'>
         <div className='p-4 flex items-center'>
           <Link to='/product' style={{ textDecoration: "none" }}>
             <div className='flex justify-start bg-[#A3B4BB] m-4 p-6 rounded-xl w-fit'>
@@ -48,12 +46,12 @@ export default function ProductPage() {
         <div className='flex justify-around h-16'>
           <Link to='/product/top'>
             <Button
-              bg={activeButton === "top" ? "blue" : "lightBlue"}
-              border='blue'
-              width={200}
-              color={activeButton === "top" ? "white" : "black"}
+              className='w-40'
               fontSize='text-2xl'
               fontWeight='font-semibold'
+              bg={activeButton === "top" ? "blue" : "lightBlue"}
+              border='blue'
+              color={activeButton === "top" ? "white" : "black"}
               onClick={() => handleButtonClick("top")}
             >
               Top
@@ -61,12 +59,12 @@ export default function ProductPage() {
           </Link>
           <Link to='/product/bottom'>
             <Button
-              bg={activeButton === "bottom" ? "blue" : "lightBlue"}
-              border='blue'
-              width={200}
-              color={activeButton === "bottom" ? "white" : "black"}
+              className='w-40'
               fontSize='text-2xl'
               fontWeight='font-semibold'
+              bg={activeButton === "bottom" ? "blue" : "lightBlue"}
+              border='blue'
+              color={activeButton === "bottom" ? "white" : "black"}
               onClick={() => handleButtonClick("bottom")}
             >
               Bottom
@@ -74,12 +72,12 @@ export default function ProductPage() {
           </Link>
           <Link to='/product/accessories'>
             <Button
-              bg={activeButton === "accessories" ? "blue" : "lightBlue"}
-              border='blue'
-              width={200}
-              color={activeButton === "accessories" ? "white" : "black"}
+              className='w-40'
               fontSize='text-2xl'
               fontWeight='font-semibold'
+              bg={activeButton === "accessories" ? "blue" : "lightBlue"}
+              border='blue'
+              color={activeButton === "accessories" ? "white" : "black"}
               onClick={() => handleButtonClick("accessories")}
             >
               Accessories

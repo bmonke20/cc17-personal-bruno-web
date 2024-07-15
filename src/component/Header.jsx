@@ -1,17 +1,22 @@
-import { useState, useContext } from "react";
-import { CartContext } from "../contexts/CartContext";
+import { useState, useEffect } from "react";
 import { Cart } from "../icon/Icon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown";
 import useAuth from "../hooks/useAuth";
+import useCart from "../hooks/useCart";
 
 export default function Header() {
   const [isLogin, setIsLogin] = useState(false);
   const { logout, authUser } = useAuth();
-  const { cart } = useContext(CartContext);
+  const { cartItems } = useCart();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsLogin(authUser !== null);
+  }, [authUser]);
 
   const handleLogin = () => {
-    setIsLogin(true);
+    navigate("/login");
   };
 
   const handleLogout = () => {
@@ -19,9 +24,11 @@ export default function Header() {
     logout();
   };
 
-  const countCartItems = () => {
-    return cart?.reduce((total, product) => total + product.quantity, 0) || 0;
-  };
+  // Calculate total number of items in the cart
+  const totalItemsInCart = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   return (
     <div>
@@ -47,9 +54,9 @@ export default function Header() {
               <Link to='/cart'>
                 <Cart />
               </Link>
-              {/* แสดงตัวเลขจำนวนสินค้าที่มีในตะกร้า */}
+              {/* Display number of items in cart */}
               <div className='bg-[#F86158] w-6 h-6 top-5 right-3 rounded-full absolute flex items-center justify-center text-[#fff]'>
-                {countCartItems()}
+                {totalItemsInCart}
               </div>
             </div>
             {isLogin && authUser ? (
@@ -69,10 +76,7 @@ export default function Header() {
                   Profile
                 </Link>
                 <hr className='border border-[#000000]' />
-                <Link
-                  to='/orderHistory'
-                  className='block py-3 text-center text-xl'
-                >
+                <Link to='/order' className='block py-3 text-center text-xl'>
                   History
                 </Link>
                 <hr className='border border-[#000000]' />

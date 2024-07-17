@@ -5,10 +5,25 @@ import ProductBox from "../../component/ProductBox";
 import TopPage from "./TopPage";
 import BottomPage from "./BottomPage";
 import AccessoriesPage from "./Accessories";
+import productApi from "../../apis/productApi";
 
 export default function ProductPage() {
   const location = useLocation();
+  const [products, setProducts] = useState([]);
   const [activeButton, setActiveButton] = useState("");
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await productApi.getAllProduct();
+        setProducts(response.data);
+      } catch (err) {
+        console.log("Fetch Error", err);
+      }
+    };
+
+    fetchProduct();
+  }, []);
 
   useEffect(() => {
     setActiveButton(getActiveButtonFromPath(location.pathname));
@@ -90,7 +105,7 @@ export default function ProductPage() {
           <Route path='/product/bottom' element={<BottomPage />} />
           <Route path='/product/accessories' element={<AccessoriesPage />} />
         </Routes>
-        <ProductBox category={activeButton} />
+        <ProductBox category={activeButton} products={products} />
       </div>
     </div>
   );

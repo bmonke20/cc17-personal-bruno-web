@@ -1,23 +1,23 @@
 import { useState } from "react";
 import Edit from "./EditProduct";
-import { useEffect } from "react";
-import productApi from "../../apis/productApi";
+import Modal from "../../component/Modal";
 
-export default function ProductCard() {
-  const [products, setProducts] = useState([]);
+export default function ProductCard({
+  products,
+  onUpdateProduct,
+  onDeleteProduct,
+}) {
+  const [open, setOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(products);
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await productApi.getAllProduct();
-        setProducts(response);
-      } catch (err) {
-        console.log("Fetch Error", err);
-      }
-    };
+  const handleEditProduct = (product) => {
+    setCurrentProduct(product);
+    setOpen(true);
+  };
 
-    fetchProduct();
-  }, []);
+  const handleDeleteProduct = (productId) => {
+    onDeleteProduct(productId);
+  };
 
   return (
     <div className='grid grid-cols-2 gap-4'>
@@ -55,12 +55,37 @@ export default function ProductCard() {
                 </div>
               </div>
             </div>
-            <div className='mx-2'>
-              <Edit productId={product.id} />
+            <div>
+              <span
+                className='text-[#40565C] cursor-pointer underline mx-2'
+                onClick={() => handleEditProduct(product)}
+              >
+                Edit
+              </span>
+              <span
+                className='text-[#40565C] cursor-pointer underline mx-2'
+                onClick={() => handleDeleteProduct(product.id)}
+              >
+                Delete
+              </span>
             </div>
           </div>
         </div>
       ))}
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title='Edit Product'
+        width='40'
+      >
+        {currentProduct && (
+          <Edit
+            productId={currentProduct}
+            onUpdateProduct={onUpdateProduct}
+            setOpen={setOpen}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

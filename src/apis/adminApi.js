@@ -1,6 +1,8 @@
-import axios from "../config/axiosAdmin";
+import axios from "../config/axiosUser";
 
 const adminApi = {};
+
+adminApi.login = (body) => axios.post("/admin/login", body);
 
 // Product
 adminApi.getAllProduct = () => axios.get("/admin/product");
@@ -9,7 +11,7 @@ adminApi.getProductById = (productId) =>
 adminApi.createProduct = (productData) =>
   axios.post("/admin/product", productData);
 adminApi.updateProduct = (productId, productData) =>
-  axios.put(`/admin/product/${productId}`, productData);
+  axios.patch(`/admin/product/${productId}`, productData);
 adminApi.deleteProduct = (productId) =>
   axios.delete(`/admin/product/${productId}`);
 

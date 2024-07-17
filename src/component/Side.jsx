@@ -1,7 +1,12 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 export default function Side() {
-  const location = useLocation();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div className='flex flex-col items-center gap-8 mt-8'>
@@ -29,9 +34,8 @@ export default function Side() {
 
       <Link
         to='/'
-        className={`w-4/5 h-20 rounded-lg flex items-center justify-center cursor-pointer ${
-          location.pathname === "/admin/login" ? "bg-[#E5ECF0]" : ""
-        }`}
+        className='w-4/5 h-20 rounded-lg flex items-center justify-center cursor-pointer'
+        onClick={handleLogout}
       >
         <h1 className='text-xl font-semibold text-gray-800'>Logout</h1>
       </Link>

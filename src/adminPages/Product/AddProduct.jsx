@@ -1,48 +1,68 @@
-import { useState } from "react";
-import Modal from "../../component/Modal";
+import { useState, useRef } from "react";
 import Input from "../../component/Input";
 import Button from "../../component/Button";
-import { useRef } from "react";
 import { toast } from "react-toastify";
 import { Upload } from "../../icon/Icon";
+import productApi from "../../apis/productApi";
 
 const initialInput = {
   productName: "",
   productType: "",
   productDetail: "",
-  productPrice: "",
+  price: "",
 };
 
 const initialInputError = {
   productName: "",
   productType: "",
   productDetail: "",
-  productPrice: "",
+  price: "",
   productImage: "",
 };
 
-export default function Add() {
-  const [open, setOpen] = useState();
+export default function Add({ onAddProduct, setOpen }) {
   const [input, setInput] = useState(initialInput);
   const [inputError, setInputError] = useState(initialInputError);
 
   const [selectFile, setSelectFile] = useState(null);
-  const fileEl = useRef();
+  const fileEl = useRef(null);
 
   const handleChaneInput = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setInput((prevInput) => ({
+      ...prevInput,
+      [name]: value,
+    }));
   };
 
   const handleFileChange = (e) => {
     setSelectFile(e.target.files[0]);
-    setInputError((prev) => ({ ...prev, image: "" }));
+    setInputError((prev) => ({ ...prev, productImage: "" }));
   };
 
-  const handleAddProduct = () => {
-    setInput(initialInput);
-    setSelectFile(null);
-    setOpen(false);
-    toast.success("Add Product Success");
+  const handleAddProduct = async (e) => {
+    try {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append("productName", input?.productName);
+      formData.append("productType", input?.productType);
+      formData.append("productDetail", input?.productDetail);
+      formData.append("productPrice", input?.price);
+      formData.append("productImage", selectFile);
+
+      const response = await productApi.createProduct(formData);
+      console.log("Product added successfully:", response.data);
+      onAddProduct(response.data);
+
+      setInput(initialInput);
+      setInputError({ ...initialInputError });
+      setSelectFile(null);
+      setOpen(false);
+      toast.success("Product added successfully");
+    } catch (error) {
+      console.error("Failed to add product:", error);
+    }
   };
 
   const handleCancel = () => {
@@ -53,122 +73,111 @@ export default function Add() {
 
   return (
     <div>
-      <h1
-        className='text-[#40565C] cursor-pointer underline'
-        onClick={() => setOpen(true)}
-      >
-        Add Product
-      </h1>
+      <div className='flex justify-center items-center gap-8 my-8'>
+        <div>
+          <input
+            className='hidden'
+            type='file'
+            ref={fileEl}
+            onChange={handleFileChange}
+          />
+          {selectFile ? (
+            <div className='bg-[#FFFFFF] rounded-lg w-60 h-60'>
+              <img
+                src={URL.createObjectURL(selectFile)}
+                alt='selected'
+                className='w-full h-full object-cover rounded-lg'
+              />
+            </div>
+          ) : (
+            <div
+              className='flex flex-col justify-center items-center bg-[#FFFFFF] rounded-lg w-60 h-60 cursor-pointer'
+              onClick={() => fileEl.current?.click()}
+            >
+              <Upload />
+              <div className='text-[#73979F]'>Upload image here</div>
+            </div>
+          )}
+        </div>
 
-      <Modal
-        title='Add Product'
-        open={open}
-        onClose={() => setOpen(false)}
-        width='40'
-      >
-        <div className='flex justify-center items-center gap-8 my-8'>
+        <div className='h-60 flex flex-col justify-around gap-2'>
           <div>
-            <input
-              className='hidden'
-              type='file'
-              ref={fileEl}
-              onChange={handleFileChange}
+            <span>Product Name :</span>
+            <Input
+              placeholder='Product Name'
+              value={input.productName}
+              name='productName'
+              border='blue'
+              onChange={handleChaneInput}
+              error={inputError.productName}
             />
-            {selectFile ? (
-              <div className='bg-[#FFFFFF] rounded-lg w-60 h-60'>
-                <img
-                  src={URL.createObjectURL(selectFile)}
-                  alt='selected'
-                  className='w-full h-full object-cover rounded-lg'
-                />
-              </div>
-            ) : (
-              <div
-                className='flex flex-col justify-center items-center bg-[#FFFFFF] rounded-lg w-60 h-60 cursor-pointer'
-                onClick={() => fileEl.current?.click()}
-              >
-                <Upload />
-                <div className='text-[#73979F]'>Upload image here</div>
-              </div>
-            )}
           </div>
 
-          <div className='h-60 flex flex-col justify-around gap-2'>
-            <div>
-              <span>Product Name :</span>
-              <Input
-                placeholder='Product Name'
-                value={input.productName}
-                name='productName'
-                border='blue'
-                onChange={handleChaneInput}
-                error={inputError.productName}
-              />
-            </div>
+          <div>
+            <span>Product Type :</span>
 
-            <div>
-              <span>Product Type :</span>
-              <select
-                name='type'
-                value={input.type}
-                className='w-full px-2 py-2 rounded-xl border-solid border-2 border-[#627B86] bg-[#E5ECF0]'
-              >
-                <option value='' disabled>
-                  Select type
-                </option>
-                <option value='top'>Top</option>
-                <option value='bottom'>Bottom</option>
-                <option value='accessories'>Accessories</option>
-              </select>
-            </div>
+            <select
+              name='productType'
+              value={input.productType}
+              onChange={handleChaneInput}
+              className='w-full px-2 py-2 rounded-xl border-solid border-2 border-[#627B86] bg-[#E5ECF0]'
+            >
+              <option value='' disabled>
+                Select type
+              </option>
+              <option value='TOP'>TOP</option>
+              <option value='BOTTOM'>BOTTOM</option>
+              <option value='ACCESSORIES'>ACCESSORIES</option>
+            </select>
+          </div>
 
-            <div>
-              <span>Product Detail :</span>
-              <Input
-                placeholder='Product Detail'
-                value={input.productDetail}
-                name='productDetail'
-                border='blue'
-                onChange={handleChaneInput}
-                error={inputError.productDetail}
-              />
-            </div>
+          <div>
+            <span>Product Detail :</span>
+            <Input
+              placeholder='Product Detail'
+              value={input?.productDetail}
+              name='productDetail'
+              border='blue'
+              onChange={handleChaneInput}
+              error={inputError.productDetail}
+            />
+          </div>
 
-            <div>
-              <span>Product Price :</span>
-              <Input
-                placeholder='Product Price'
-                value={input.productPrice}
-                name='productPrice'
-                border='blue'
-                onChange={handleChaneInput}
-                error={inputError.productPrice}
-              />
-            </div>
+          <div>
+            <span>Product Price :</span>
+            <Input
+              placeholder='Product Price'
+              type='number'
+              value={input?.price}
+              name='price'
+              border='blue'
+              onChange={handleChaneInput}
+              error={inputError.productPrice}
+            />
           </div>
         </div>
+      </div>
 
-        <div className='text-end mt-20'>
-          <Button
-            color='white'
-            bg='blue'
-            className='w-20 h-12 mx-4'
-            fontSize='text-xl'
-            onClick={handleAddProduct}
-          >
-            Add
-          </Button>
-          <Button
-            color='black'
-            bg='red'
-            className='w-22 h-12'
-            fontSize='text-xl'
-            onClick={handleCancel}
-          >
-            Cancel
-          </Button>
-        </div>
-      </Modal>
+      <div className='text-end mt-20'>
+        <Button
+          color='white'
+          bg='blue'
+          className='w-20 h-12 mx-4'
+          fontSize='text-xl'
+          onClick={handleAddProduct}
+        >
+          Add
+        </Button>
+        <Button
+          color='black'
+          bg='red'
+          className='w-22 h-12'
+          fontSize='text-xl'
+          onClick={handleCancel}
+        >
+          Cancel
+        </Button>
+      </div>
     </div>
   );
 }

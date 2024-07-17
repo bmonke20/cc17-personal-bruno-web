@@ -11,6 +11,8 @@ import AdminProduct from "../adminPages/Product/AdminProduct";
 import AdminDashboard from "../adminPages/Dashboard/AdminDashboard";
 import OrderHistoryForm from "../userPages/HistoryPage/OrderHistory";
 import About from "../userPages/AboutPage/About";
+import ProtectRoute from "./ProtectRoute";
+import RedirectLogin from "./RedirectLogin";
 
 const LoginPage = lazy(() => import("../userPages/LoginPage/LoginPage"));
 const HomePage = lazy(() => import("../userPages/HomePage/HomePage"));
@@ -23,9 +25,16 @@ const router = createBrowserRouter([
     element: <MainContainer />,
     children: [
       { path: "/", element: <HomePage /> },
-      { path: "/login", element: <LoginPage /> },
       {
-        path: "/product",
+        path: "/login",
+        element: (
+          <RedirectLogin>
+            <LoginPage />
+          </RedirectLogin>
+        ),
+      },
+      {
+        path: "product",
         element: <ProductPage />,
         children: [
           { path: "top", element: <TopPage /> },
@@ -43,7 +52,11 @@ const router = createBrowserRouter([
 
   {
     path: "/admin",
-    element: <AdminContainer />,
+    element: (
+      <ProtectRoute>
+        <AdminContainer />
+      </ProtectRoute>
+    ),
     children: [
       { path: "", element: <AdminDashboard /> },
       { path: "product", element: <AdminProduct /> },

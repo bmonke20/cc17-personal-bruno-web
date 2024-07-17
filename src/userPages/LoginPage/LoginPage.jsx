@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Input from "../../component/Input";
 import Button from "../../component/Button";
 import useAuth from "../../hooks/useAuth";
 import loginValidate from "../../features/validator/LoginValidate";
 import Header from "../../component/Header";
 import RegisterPage from "../RegistePage/RegisterPage";
+// import { getAccessToken } from "../../utils/localstorage";
 
 const initialInput = {
   identify: "",
@@ -25,7 +26,7 @@ export default function LoginForm() {
 
   const { login } = useAuth();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleChangeInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -41,7 +42,14 @@ export default function LoginForm() {
       }
       setInputError(initialInputError);
       await login(input);
-      navigate("/");
+      // if (getAccessToken()) {
+      //   console.log(authUser, "auth user");
+      //   if (authUser?.isAdmin === true) {
+      //     navigate("/admin");
+      //   } else {
+      //     navigate("/");
+      //   }
+      // }
       toast.success("login success");
     } catch (err) {
       console.log(err);

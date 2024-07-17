@@ -2,23 +2,16 @@ import axios from "axios";
 
 const productApi = {};
 
-// productApi.createProduct = axios.post("/:productType", productData);
-productApi.getAllProduct = async () => {
-  try {
-    const response = await axios.get("/product");
-    return response.data;
-  } catch (err) {
-    console.log(err);
-  }
-};
+productApi.getAllProduct = () => axios.get("/product");
 
-productApi.getProductByTd = async () => {
-  try {
-    const response = await axios.get("/product/${productId}");
-    return response.data;
-  } catch (err) {
-    console.log(err);
-  }
-};
+// admin
+productApi.createProduct = (formData) => axios.post("/product", formData);
+
+productApi.getProductById = (productId) => axios.get(`/product/${productId}`);
+
+productApi.updateProduct = (productId, formData) =>
+  axios.patch(`/product/${productId}`, formData);
+
+productApi.deleteProduct = (productId) => axios.delete(`/product/${productId}`);
 
 export default productApi;

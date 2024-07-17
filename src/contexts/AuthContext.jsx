@@ -108,6 +108,7 @@ export default function AuthContextProvider({ children }) {
 
       const resGetAuth = await userApi.getAuth();
       setAuthUser(resGetAuth.data.user);
+      console.log("-------", authUser);
     } catch (err) {
       console.log(err);
     }

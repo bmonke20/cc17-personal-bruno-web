@@ -1,4 +1,4 @@
-export function Bin({ className }) {
+export function Bin({ className, onClick }) {
   return (
     <svg
       className={className}
@@ -7,6 +7,7 @@ export function Bin({ className }) {
       height='40px'
       viewBox='-2.94 0 31.716 31.716'
       xmlns='http://www.w3.org/2000/svg'
+      onClick={onClick}
     >
       <g id='SVGRepo_bgCarrier'></g>
       <g id='SVGRepo_tracerCarrier'></g>

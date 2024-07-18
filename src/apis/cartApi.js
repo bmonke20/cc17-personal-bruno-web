@@ -32,28 +32,20 @@ import axios from "axios";
 
 const cartApi = {};
 
-cartApi.getCart = async (userId) => {
-  const response = await axios.get(`/cart/${userId}`);
-  return response.data;
-};
+// cartApi.getCart = (userId) => axios.get(`/cart/${userId}`);
 
-cartApi.addCart = async (productId, amount, userId) => {
-  const response = await axios.post("/cart/add", {
+cartApi.addToCart = (productId, amount, userId) =>
+  axios.post("/cart", {
     productId,
     amount,
     userId,
   });
-  return response.data;
-};
 
-cartApi.updateCart = async (amount, cartId) => {
-  const response = await axios.patch(`/cart/update/${cartId}`, { amount });
-  return response.data;
-};
+cartApi.updateCart = (cartId, amount) =>
+  axios.patch(`/cart/${cartId}`, {
+    amount,
+  });
 
-cartApi.deleteCart = async (cartId) => {
-  const response = await axios.delete(`/cart/delete/${cartId}`);
-  return response.data;
-};
+// cartApi.deleteCart = (cartId) => axios.delete(`/cart/${cartId}`);
 
 export default cartApi;

@@ -9,16 +9,16 @@ function App() {
   return (
     <>
       <Suspense fallback={<Spinner />}>
-        <CartContextProvider>
-          <AuthContextProvider>
+        <AuthContextProvider>
+          <CartContextProvider>
             <Router />
             <ToastContainer
               position='bottom-right'
               autoClose={2000}
               transition={Slide}
             />
-          </AuthContextProvider>
-        </CartContextProvider>
+          </CartContextProvider>
+        </AuthContextProvider>
       </Suspense>
     </>
   );

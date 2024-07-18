@@ -2,12 +2,17 @@ import axios from "axios";
 
 const orderApi = {};
 
-orderApi.createOrder = (orderData) => axios.post("/user/order", orderData);
+orderApi.getAllOrder = () => axios.get(`/order`);
 
-// admin
-orderApi.getAllOrder = () => axios.get("/admin/order");
-orderApi.getOrderById = (orderId) => axios.get(`/admin/order/${orderId}`);
-orderApi.updateOrderStatus = (orderId, statusData) =>
-  axios.patch(`/admin/order/${orderId}`, statusData);
+orderApi.getOrderByUser = (userId) => axios.get(`/order/${userId}`);
+
+orderApi.createOrder = (orderItem) => axios.post(`/order`, orderItem);
+
+orderApi.getOrderById = (orderId) => axios.get(`/order/${orderId}`);
+
+orderApi.updateOrder = (orderId, status) =>
+  axios.patch(`/order/${orderId}/status`, { status });
+
+orderApi.deleteOrder = (orderId) => axios.delete(`/order/${orderId}`);
 
 export default orderApi;

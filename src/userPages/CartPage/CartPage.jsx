@@ -87,9 +87,11 @@ import CartProduct from "./CartProduct";
 import useCart from "../../hooks/useCart";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import orderApi from "../../apis/orderApi";
 
 export default function CartPage() {
-  const { cartItems, getTotalPrice, clearCart } = useCart();
+  const { cartItems, setCartItems, getTotalPrice, clearCart } = useCart();
   const { authUser } = useAuth(); // Get authUser from AuthContext
   const navigate = useNavigate(); // Use useNavigate hook for navigation
 
@@ -100,6 +102,20 @@ export default function CartPage() {
     0
   );
 
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        if (authUser) {
+          const res = await orderApi.getOrderByUser(authUser.id);
+          setCartItems(res.data.orders.flatMap((order) => order.orderItems));
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCart();
+  }, [authUser, setCartItems]);
+
   const handlePayment = () => {
     if (authUser) {
       setOpen(true); // Open modal if user is authenticated
@@ -109,6 +125,8 @@ export default function CartPage() {
       navigate("/login"); // Navigate to the login page
     }
   };
+
+  console.log("product", cartItems);
 
   return (
     <div>

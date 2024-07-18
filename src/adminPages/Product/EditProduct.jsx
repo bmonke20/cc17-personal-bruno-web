@@ -87,7 +87,7 @@ export default function Edit({ productId, onUpdateProduct, setOpen }) {
               <img
                 src={URL.createObjectURL(selectFile)}
                 alt='selected'
-                className='w-full h-full object-cover rounded-lg'
+                className='w-60 h-60 object-cover rounded-lg'
               />
             </div>
           ) : (
@@ -96,7 +96,7 @@ export default function Edit({ productId, onUpdateProduct, setOpen }) {
               onClick={() => fileEl.current?.click()}
             >
               <img
-                className='w-full h-full object-cover rounded-3xl'
+                className='w-60 h-60 object-cover rounded-3xl'
                 src={productId?.productImage || ""}
                 alt='productImage'
               />

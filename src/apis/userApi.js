@@ -8,6 +8,6 @@ userApi.login = (body) => axios.post("/auth/login", body);
 
 userApi.getAuth = () => axios.get("/auth/me");
 
-userApi.updateProfile = (body) => axios.put("/auth/update", body);
+userApi.updateProfile = (body) => axios.patch("/auth/update", body);
 
 export default userApi;

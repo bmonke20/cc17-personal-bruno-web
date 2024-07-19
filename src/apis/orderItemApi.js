@@ -2,16 +2,12 @@ import axios from "axios";
 
 const orderItemApi = {};
 
-orderItemApi.createOrderItem = (itemAmount) =>
-  axios.post("/orderItem", itemAmount);
+orderItemApi.createOrderItem = () => axios.post("/orderItem");
 
-orderItemApi.getAllOrderItems = () => axios.get("/orderItem");
+orderItemApi.getOrderItem = () => axios.get("/orderItemm");
 
-orderItemApi.getOrderItemById = (id) => axios.get(`/orderItem/${id}`);
+orderItemApi.updateOrderItem = (userId) => axios.patch(`'orderItem/${userId}`);
 
-orderItemApi.updateOrderItem = (id, productId, itemAmount) =>
-  axios.patch(`/orderItem/${id}`, { productId, itemAmount });
-
-orderItemApi.deleteOrderItem = (id) => axios.delete(`/orderItem/${id}`);
+orderItemApi.deleteOrderItem = (userId) => axios.delete(`/orderItem/${userId}`);
 
 export default orderItemApi;

@@ -13,6 +13,7 @@ import OrderHistoryForm from "../userPages/HistoryPage/OrderHistory";
 import About from "../userPages/AboutPage/About";
 import ProtectRoute from "./ProtectRoute";
 import RedirectLogin from "./RedirectLogin";
+import UserProtectRoute from "./UserProtectRoute";
 
 const LoginPage = lazy(() => import("../userPages/LoginPage/LoginPage"));
 const HomePage = lazy(() => import("../userPages/HomePage/HomePage"));
@@ -42,11 +43,42 @@ const router = createBrowserRouter([
           { path: "accessories", element: <AccessoriesPage /> },
         ],
       },
-      { path: "payment", element: <PaymentPage /> },
-      { path: "profile/:userId", element: <ProfilePage /> },
-      { path: "cart", element: <CartPage /> },
-      { path: "order", element: <OrderHistoryForm /> },
-      { path: "about", element: <About /> },
+      {
+        path: "payment",
+        element: (
+          <UserProtectRoute>
+            <PaymentPage />
+          </UserProtectRoute>
+        ),
+      },
+      {
+        path: "profile/:userId",
+        element: (
+          <UserProtectRoute>
+            <ProfilePage />
+          </UserProtectRoute>
+        ),
+      },
+      {
+        path: "cart",
+        element: (
+          <UserProtectRoute>
+            <CartPage />
+          </UserProtectRoute>
+        ),
+      },
+      {
+        path: "order",
+        element: (
+          <UserProtectRoute>
+            <OrderHistoryForm />
+          </UserProtectRoute>
+        ),
+      },
+      {
+        path: "about",
+        element: <About />,
+      },
     ],
   },
 

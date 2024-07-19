@@ -79,54 +79,40 @@
 //   );
 // }
 
-import { useState } from "react";
+// import { useState } from "react";
 import Button from "../../component/Button";
-import Modal from "../../component/Modal";
-import PaymentPage from "../PaymentPage/PaymentPage";
+// import Modal from "../../component/Modal";
+// import PaymentPage from "../PaymentPage/PaymentPage";
 import CartProduct from "./CartProduct";
 import useCart from "../../hooks/useCart";
-import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import orderApi from "../../apis/orderApi";
 
 export default function CartPage() {
-  const { cartItems, setCartItems, getTotalPrice, clearCart } = useCart();
-  const { authUser } = useAuth(); // Get authUser from AuthContext
+  const { cartItems, getTotalPrice, clearCart } = useCart();
   const navigate = useNavigate(); // Use useNavigate hook for navigation
 
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
-  const totalQuantity = cartItems.reduce(
-    (total, product) => total + product.quantity,
-    0
-  );
+  const totalQuantity = Array.isArray(cartItems)
+    ? cartItems.reduce((total, product) => total + product.amount, 0)
+    : 0;
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        if (authUser) {
-          const res = await orderApi.getOrderByUser(authUser.id);
-          setCartItems(res.data.orders.flatMap((order) => order.orderItems));
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchCart();
-  }, [authUser, setCartItems]);
+  const handleOrder = async () => {
+    try {
+      const OrderItem = cartItems.map((item) => ({
+        productId: item.productId,
+        itemAmount: item.amount,
+        totalPrice: item.products.price * item.amount,
+      }));
 
-  const handlePayment = () => {
-    if (authUser) {
-      setOpen(true); // Open modal if user is authenticated
-    } else {
-      // Redirect to login page
-      console.log("User is not logged in. Redirecting to login page...");
-      navigate("/login"); // Navigate to the login page
+      await orderApi.createOrder({ OrderItem });
+
+      navigate("/order");
+    } catch (err) {
+      console.log(err);
     }
   };
-
-  console.log("product", cartItems);
 
   return (
     <div>
@@ -144,7 +130,7 @@ export default function CartPage() {
             </span>
           </div>
           <div className='flex flex-col gap-4'>
-            {cartItems.length > 0 ? (
+            {cartItems && cartItems.length > 0 ? (
               cartItems.map((product) => (
                 <CartProduct key={product.id} product={product} />
               ))
@@ -155,7 +141,7 @@ export default function CartPage() {
             )}
           </div>
 
-          {cartItems.length > 0 && (
+          {cartItems && cartItems.length > 0 && (
             <>
               <div>
                 <div className='text-2xl font-semibold text-right mx-40 mt-4'>
@@ -173,9 +159,9 @@ export default function CartPage() {
                   fontWeight='font-semibold'
                   bg='yellow'
                   border='none'
-                  onClick={handlePayment} // Use handlePayment function
+                  onClick={handleOrder} // Use handlePayment function
                 >
-                  Payment
+                  Checkout
                 </Button>
               </div>
             </>
@@ -183,11 +169,11 @@ export default function CartPage() {
         </div>
       </div>
 
-      {open && (
+      {/* {open && (
         <Modal open={open} onClose={() => setOpen(false)} width={60}>
           <PaymentPage />
         </Modal>
-      )}
+      )} */}
     </div>
   );
 }

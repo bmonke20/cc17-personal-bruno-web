@@ -1,4 +1,4 @@
-// import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 // import useAuth from "../hooks/useAuth";
 // import Spinner from "./Spinner";
 
@@ -26,12 +26,13 @@ export default function ProtectRoute({ children }) {
 
   if (!isAuthUserLoading && authUser?.isAdmin) {
     // return <Navigate to='/admin' />;
+    return children;
   }
 
   return (
     <>
       {isAuthUserLoading && <Spinner />}
-      {children}
+      <Navigate to='/login' />
     </>
   );
 }

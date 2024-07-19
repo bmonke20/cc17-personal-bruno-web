@@ -37,17 +37,9 @@ export default function ProductBox({ products }) {
     }
   }, [location.pathname, products]);
 
-  // const addTocart = async (productId, amount, id) => {
-  //   try {
-  //     const response = await cartApi.addCart(productId, amount, id);
-
-  //     if (response.success) {
-  //       addToCart(productId);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const handleAdd = (productId, amount = 1) => {
+    addToCart(productId, amount);
+  };
 
   return (
     <div className='flex flex-grow min-h-screen'>
@@ -58,7 +50,7 @@ export default function ProductBox({ products }) {
             className='w-4/5 rounded-xl hover:shadow-md hover:border-[#73979F] hover:border-2 h-fit p-8 flex flex-col justify-between'
           >
             <div className='flex justify-end -mt-4 -mr-4'>
-              <Plus onClick={() => addToCart(products)} />
+              <Plus onClick={() => handleAdd(products.id)} />
             </div>
             <img
               src={products.productImage}

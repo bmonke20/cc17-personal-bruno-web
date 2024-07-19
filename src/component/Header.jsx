@@ -8,7 +8,7 @@ import useCart from "../hooks/useCart";
 export default function Header() {
   const [isLogin, setIsLogin] = useState(false);
   const { logout, authUser } = useAuth();
-  const { cartItems } = useCart();
+  const { cartItems, setCartItems } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,14 +21,14 @@ export default function Header() {
 
   const handleLogout = () => {
     setIsLogin(false);
+    setCartItems([]);
     logout();
   };
 
   // Calculate total number of items in the cart
-  const totalItemsInCart = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  const totalItemsInCart = cartItems
+    ? cartItems.reduce((total, item) => total + item.amount, 0)
+    : 0;
 
   return (
     <div>

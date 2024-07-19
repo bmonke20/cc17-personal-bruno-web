@@ -10,13 +10,13 @@ export default function CartProduct({ product }) {
         <div className='flex items-center gap-10'>
           <div>
             <img
-              src={product.productImage}
-              alt={product.productName}
+              src={product.products.productImage}
+              alt={product.products.productName}
               className='h-[120px] w-[120px]'
             />
           </div>
           <div>
-            <div>Product Name : {product.productName}</div>
+            <div>Product Name : {product.products.productName}</div>
             <div className='flex gap-4'>
               <span>Quantity :</span>
               <span>
@@ -30,7 +30,7 @@ export default function CartProduct({ product }) {
                 </div>
               </span>
               <span className='border rounded-lg w-10 h-8 text-center'>
-                {product.quantity}
+                {product.amount}
               </span>
               <span>
                 <button
@@ -42,7 +42,7 @@ export default function CartProduct({ product }) {
               </span>
               <span>pcs</span>
             </div>
-            <div>Price : {product.price * product.quantity} Bath</div>
+            <div>Price : {product.products.price * product.amount} Bath</div>
           </div>
         </div>
         <div

@@ -8,11 +8,11 @@ export default function CartProduct({ product }) {
     <div className='w-4/5 rounded-xl border-2 border-[#73979F] p-8 mx-auto text-xl shadow-md'>
       <div className='flex justify-between items-center'>
         <div className='flex items-center gap-10'>
-          <div>
+          <div className='h-[120px] w-[120px]'>
             <img
               src={product.products.productImage}
               alt={product.products.productName}
-              className='h-[120px] w-[120px]'
+              className='h-fit w-fit'
             />
           </div>
           <div>

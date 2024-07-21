@@ -88,7 +88,7 @@ export const CartContextProvider = ({ children }) => {
         if (authUser) {
           const userId = authUser ? authUser.id : null;
           const response = await cartApi.getCart(userId);
-          console.log("resss", response);
+          // console.log("resss", response);
           setCartItems(() => response.data.cartItem);
         }
       } catch (err) {

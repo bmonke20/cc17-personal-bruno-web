@@ -34,6 +34,7 @@ export default function AdminProduct() {
       setOpen(false);
     } catch (error) {
       console.error("Failed to add product:", error);
+      toast.error("Failed to add product");
     }
   };
 
@@ -48,6 +49,7 @@ export default function AdminProduct() {
       toast.success("Product updated");
     } catch (error) {
       console.error("Failed to update product:", error);
+      toast.error("Failed to update product");
     }
   };
 
@@ -58,6 +60,7 @@ export default function AdminProduct() {
       toast.success("Delete Product success");
     } catch (err) {
       console.log(err);
+      toast.error("Failed to delete product");
     }
   };
 

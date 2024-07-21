@@ -55,7 +55,7 @@ export default function ProductBox({ products }) {
             <img
               src={products.productImage}
               alt={products.productName}
-              className='h-[260px] w-[400px]'
+              className='h-fit w-fit'
             />
             <div className='flex justify-between items-center m-4 text-xl'>
               <h1>{products.productName}</h1>

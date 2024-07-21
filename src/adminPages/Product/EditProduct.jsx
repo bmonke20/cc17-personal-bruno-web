@@ -23,16 +23,6 @@ export default function Edit({ productId, onUpdateProduct, setOpen }) {
   const [selectFile, setSelectFile] = useState(null);
   const fileEl = useRef();
 
-  // useEffect(() => {
-  //   setInput({
-  //     productImage: productId?.productImage || "",
-  //     productName: productId?.productName || "",
-  //     productType: productId?.productType || "",
-  //     productDetail: productId?.productDetail || "",
-  //     productPrice: productId?.price || "",
-  //   });
-  // }, [productId]);
-
   const handleChangeInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
     setInputError((prev) => ({ ...prev, [e.target.name]: "" }));
@@ -52,7 +42,6 @@ export default function Edit({ productId, onUpdateProduct, setOpen }) {
   const handleUpdateProduct = async () => {
     try {
       const formData = new FormData();
-      // formData.append("productImage", selectFile);
       formData.append("productName", input?.productName);
       formData.append("productType", input?.productType);
       formData.append("productDetail", input?.productDetail);
@@ -62,9 +51,6 @@ export default function Edit({ productId, onUpdateProduct, setOpen }) {
         formData.append("productImage", selectFile);
       }
       onUpdateProduct(productId.id, formData);
-      // const response = await productApi.updateProduct(productId.id, formData);
-      // console.log("Product updated successfully:", response.data);
-      // onUpdateProduct(response.data);
       setOpen(false);
       toast.success("Product updated");
     } catch (error) {
@@ -87,7 +73,7 @@ export default function Edit({ productId, onUpdateProduct, setOpen }) {
               <img
                 src={URL.createObjectURL(selectFile)}
                 alt='selected'
-                className='w-60 h-60 object-cover rounded-lg'
+                className='w-fit h-fit object-cover rounded-lg'
               />
             </div>
           ) : (
@@ -96,7 +82,7 @@ export default function Edit({ productId, onUpdateProduct, setOpen }) {
               onClick={() => fileEl.current?.click()}
             >
               <img
-                className='w-60 h-60 object-cover rounded-3xl'
+                className='w-fit h-fit object-cover rounded-3xl'
                 src={productId?.productImage || ""}
                 alt='productImage'
               />

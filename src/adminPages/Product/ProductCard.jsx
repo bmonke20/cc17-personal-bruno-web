@@ -28,11 +28,11 @@ export default function ProductCard({
         >
           <div className='p-3 gap-4 flex justify-between'>
             <div className='flex items-center gap-8'>
-              <div>
+              <div className='h-20 w-20'>
                 <img
                   src={product.productImage}
                   alt={product.productName}
-                  className='h-20 w-20'
+                  className='h-fit w-fit'
                 />
               </div>
               <div>

@@ -13,7 +13,7 @@ export default function Side() {
       <Link
         to='/admin'
         className={`w-4/5 h-20 rounded-lg flex items-center justify-center cursor-pointer ${
-          location.pathname === "/admin/dashboard" ? "bg-[#E5ECF0]" : ""
+          location.pathname === "/admin" ? "bg-[#E5ECF0]" : ""
         }`}
       >
         <h1 className='text-xl font-semibold text-gray-800'>Dashboard</h1>

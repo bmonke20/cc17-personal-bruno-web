@@ -1,86 +1,65 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../component/Button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import orderApi from "../../apis/orderApi";
-import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import OrderBox from "./OrderBox";
+import paymentApi from "../../apis/paymentApi";
 
 export default function OrderHistoryForm() {
   const [orders, setOrders] = useState([]);
+  const [payments, setPayments] = useState({});
   const navigate = useNavigate();
   const { authUser } = useAuth();
 
   useEffect(() => {
-    console.log("useefact");
-    const fetchOrder = async () => {
+    const fetchOrderAndPayments = async () => {
       try {
-        const res = await orderApi.getOrder(authUser?.id);
-        setOrders(res.data.order);
+        // ดึงข้อมูลคำสั่งซื้อ
+        const orderRes = await orderApi.getOrder(authUser?.id);
+        const fetchedOrders = orderRes.data.order;
+        setOrders(fetchedOrders);
+
+        // ดึงข้อมูลการชำระเงินสำหรับแต่ละคำสั่งซื้อ
+        const paymentPromises = fetchedOrders.map(
+          (order) => paymentApi.getPaymentById(order.id) // ตรวจสอบว่าคุณใช้ ID ที่ถูกต้อง
+        );
+        const paymentResponses = await Promise.all(paymentPromises);
+        const paymentMap = paymentResponses.reduce((acc, res) => {
+          if (res.data) {
+            acc[res.data.orderId] = res.data; // ตรวจสอบว่าใช้ค่า key ที่ถูกต้อง
+          }
+          return acc;
+        }, {});
+        setPayments(paymentMap);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
-    fetchOrder();
-  }, []);
 
-  console.log("=====", orders);
+    fetchOrderAndPayments();
+  }, [authUser]);
+
   return (
-    <>
-      <div>
-        <div className='bg-[#F8FCFF] mt-20 min-h-[90vh] pb-8 '>
-          <div className='p-4 flex items-center'>
-            <div className='flex justify-center bg-[#A3B4BB] m-4 p-6 rounded-xl w-52 '>
-              <h1 className='text-[#26363A] font-semibold text-4xl'>History</h1>
-            </div>
-          </div>
-          {orders.map((order, idx) => (
-            <div
-              key={idx}
-              className='w-4/5 rounded-xl border-2 border-[#73979F] h-fit p-8 mx-auto text-xl shadow-md'
-            >
-              <div className='flex justify-between items-center'>
-                <div>{idx}</div>
-                <div>img</div>
-                <div>
-                  {order.OrderItem.map((item) => (
-                    <div key={item.id}>
-                      Product :
-                      {orders.OrderItem?.map((item) => item.products.id).join(
-                        ", "
-                      )}
-                    </div>
-                  ))}
-                  {order.OrderItem.map((item) => (
-                    <div key={item.id}>
-                      Quantity :
-                      {orders.OrderItem?.map((item) => item.itemAmount).join(
-                        ", "
-                      )}
-                    </div>
-                  ))}
-                  <div>Total :</div>
-                </div>
-                <div>
-                  <div className='mt-10 flex items-center'>
-                    <div>Status : </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-          <div className='mt-4 mx-40 text-end'>
-            <Button
-              className=''
-              fontSize='text-2xl'
-              fontWeight='font-semibold'
-              bg='yellow'
-              onClick={() => navigate("/")}
-            >
-              Confirm Payment
-            </Button>
-          </div>
+    <div className='bg-[#F8FCFF] mt-20 min-h-[90vh] pb-8'>
+      <div className='p-4 flex items-center'>
+        <div className='flex justify-center bg-[#A3B4BB] m-4 p-6 rounded-xl w-52'>
+          <h1 className='text-[#26363A] font-semibold text-4xl'>History</h1>
         </div>
       </div>
-    </>
+
+      <OrderBox orders={orders.slice().reverse()} payments={payments} />
+
+      <div className='mt-4 mx-40 text-end'>
+        <Button
+          fontSize='text-2xl'
+          fontWeight='font-semibold'
+          bg='yellow'
+          onClick={() => navigate("/")}
+        >
+          Back to Homepage
+        </Button>
+      </div>
+    </div>
   );
 }

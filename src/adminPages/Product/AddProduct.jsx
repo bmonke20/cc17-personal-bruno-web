@@ -40,10 +40,8 @@ export default function Add({ onAddProduct, setOpen }) {
     setInputError((prev) => ({ ...prev, productImage: "" }));
   };
 
-  const handleAddProduct = async (e) => {
+  const handleAddProduct = async () => {
     try {
-      e.preventDefault();
-
       const formData = new FormData();
       formData.append("productName", input?.productName);
       formData.append("productType", input?.productType);
@@ -62,6 +60,7 @@ export default function Add({ onAddProduct, setOpen }) {
       toast.success("Product added successfully");
     } catch (error) {
       console.error("Failed to add product:", error);
+      toast.error("Failed to add product");
     }
   };
 
@@ -86,7 +85,7 @@ export default function Add({ onAddProduct, setOpen }) {
               <img
                 src={URL.createObjectURL(selectFile)}
                 alt='selected'
-                className='w-full h-full object-cover rounded-lg'
+                className='w-fit h-fit object-cover rounded-lg'
               />
             </div>
           ) : (

@@ -16,7 +16,9 @@ export default function ProductCard({
   };
 
   const handleDeleteProduct = (productId) => {
-    onDeleteProduct(productId);
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      onDeleteProduct(productId);
+    }
   };
 
   return (

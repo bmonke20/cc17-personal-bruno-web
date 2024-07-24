@@ -1,11 +1,18 @@
 import { useState, useRef } from "react";
 import Button from "../../component/Button";
 import paymentApi from "../../apis/paymentApi";
+import orderApi from "../../apis/orderApi";
 import { toast } from "react-toastify";
 
-export default function OrderBox({ orders, payments }) {
+export default function OrderBox({
+  orders,
+  payments,
+  setOrders,
+  authUser,
+  setPayments,
+}) {
   const [selectFile, setSelectFile] = useState({});
-  const [upload, setUpload] = useState({});
+  const [cancelingOrder, setCancelingOrder] = useState(null); // ใช้สำหรับติดตามการยกเลิกคำสั่งซื้อ
   const fileEls = useRef([]);
 
   const handleFileChange = (orderId, e) => {
@@ -39,15 +46,46 @@ export default function OrderBox({ orders, payments }) {
     formData.append("slipImage", selectedFile);
 
     try {
-      const res = await paymentApi.createPayment(formData);
-      setUpload((prev) => ({
-        ...prev,
-        [order.id]: res.data,
-      }));
+      await paymentApi.createPayment(formData);
       toast.success("Payment success");
+
+      // รีเฟรชข้อมูลคำสั่งซื้อและการชำระเงิน
+      const orderRes = await orderApi.getOrder(authUser?.id);
+      const fetchedOrders = orderRes.data.order;
+      console.log("Fetched orders:", fetchedOrders);
+      setOrders(fetchedOrders);
+
+      const paymentPromises = fetchedOrders.map((order) =>
+        paymentApi.getPaymentById(order.id)
+      );
+      const paymentResponses = await Promise.all(paymentPromises);
+      const paymentMap = paymentResponses.reduce((acc, res) => {
+        if (res.data) {
+          acc[res.data.orderId] = res.data;
+        }
+        return acc;
+      }, {});
+      console.log("Fetched payments:", paymentMap);
+      setPayments(paymentMap);
     } catch (err) {
       console.error(err);
-      toast.error("Payment failed");
+    }
+  };
+
+  const handleCancelOrder = async (orderId) => {
+    if (window.confirm("Are you sure you want to cancel this order?")) {
+      setCancelingOrder(orderId);
+      try {
+        await orderApi.deleteOrder(orderId);
+        setOrders((prevOrders) =>
+          prevOrders.filter((order) => order.id !== orderId)
+        );
+        toast.success("Order cancelled successfully");
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setCancelingOrder(null);
+      }
     }
   };
 
@@ -136,8 +174,8 @@ export default function OrderBox({ orders, payments }) {
                   </div>
                 )}
                 <div className='my-2'>
-                  Status:
-                  <span>
+                  Status :
+                  <span className='mx-2'>
                     {order.status === "PENDING" ? (
                       <Button className='cursor-default' bg='yellow'>
                         PENDING
@@ -153,16 +191,30 @@ export default function OrderBox({ orders, payments }) {
                     )}
                   </span>
                 </div>
-                {order.status === "PENDING" && !hasUploaded && (
-                  <div className='mt-5'>
-                    <Button
-                      fontSize='text-xl'
-                      fontWeight='font-semibold'
-                      bg='yellow'
-                      onClick={() => handleFileUpload(order)}
-                    >
-                      Confirm Payment
-                    </Button>
+                {(order.status === "PENDING" ||
+                  order.status === "CANCELLED") && (
+                  <div className='mt-5 flex flex-col gap-4'>
+                    {order.status === "PENDING" && !hasUploaded && (
+                      <Button
+                        fontSize='text-xl'
+                        fontWeight='font-semibold'
+                        bg='yellow'
+                        onClick={() => handleFileUpload(order)}
+                      >
+                        Confirm Payment
+                      </Button>
+                    )}
+                    {order.status === "PENDING" && !hasUploaded && (
+                      <Button
+                        fontSize='text-xl'
+                        fontWeight='font-semibold'
+                        bg='red'
+                        onClick={() => handleCancelOrder(order.id)}
+                        disabled={cancelingOrder === order.id}
+                      >
+                        Cancel Order
+                      </Button>
+                    )}
                   </div>
                 )}
               </div>

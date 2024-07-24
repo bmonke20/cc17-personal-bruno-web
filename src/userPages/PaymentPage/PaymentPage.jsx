@@ -24,7 +24,6 @@ export default function PaymentPage() {
   };
 
   const handleSubmitPayment = () => {
-    // ทำสิ่งที่ต้องการก่อนเดินทางไปหน้า Home ได้ที่นี่ เช่น ส่งข้อมูลการชำระเงิน, บันทึกลงฐานข้อมูล, ปิด Modal ฯลฯ
     navigate("/");
   };
 

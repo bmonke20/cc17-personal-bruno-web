@@ -11,7 +11,6 @@ orderApi.getAllOrder = () => axios.get("/order");
 orderApi.updateOrder = (orderId, userId) =>
   axios.patch(`/order/${orderId}/${userId}`);
 
-orderApi.deleteOrder = (orderId, userId) =>
-  axios.delete(`/order/${orderId}/${userId}`);
+orderApi.deleteOrder = (orderId) => axios.delete(`/order/${orderId}`);
 
 export default orderApi;

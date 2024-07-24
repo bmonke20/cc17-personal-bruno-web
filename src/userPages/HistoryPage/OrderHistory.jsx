@@ -15,19 +15,17 @@ export default function OrderHistoryForm() {
   useEffect(() => {
     const fetchOrderAndPayments = async () => {
       try {
-        // ดึงข้อมูลคำสั่งซื้อ
         const orderRes = await orderApi.getOrder(authUser?.id);
         const fetchedOrders = orderRes.data.order;
         setOrders(fetchedOrders);
 
-        // ดึงข้อมูลการชำระเงินสำหรับแต่ละคำสั่งซื้อ
-        const paymentPromises = fetchedOrders.map(
-          (order) => paymentApi.getPaymentById(order.id) // ตรวจสอบว่าคุณใช้ ID ที่ถูกต้อง
+        const paymentPromises = fetchedOrders.map((order) =>
+          paymentApi.getPaymentById(order.id)
         );
         const paymentResponses = await Promise.all(paymentPromises);
         const paymentMap = paymentResponses.reduce((acc, res) => {
           if (res.data) {
-            acc[res.data.orderId] = res.data; // ตรวจสอบว่าใช้ค่า key ที่ถูกต้อง
+            acc[res.data.orderId] = res.data;
           }
           return acc;
         }, {});
@@ -48,7 +46,13 @@ export default function OrderHistoryForm() {
         </div>
       </div>
 
-      <OrderBox orders={orders.slice().reverse()} payments={payments} />
+      <OrderBox
+        orders={orders.slice().reverse()}
+        payments={payments}
+        setOrders={setOrders}
+        authUser={authUser}
+        setPayments={setPayments}
+      />
 
       <div className='mt-4 mx-40 text-end'>
         <Button

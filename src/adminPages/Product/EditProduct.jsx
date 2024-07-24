@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import Input from "../../component/Input";
 import Button from "../../component/Button";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 const initialInputError = {
   productName: "",
@@ -52,7 +52,7 @@ export default function Edit({ productId, onUpdateProduct, setOpen }) {
       }
       onUpdateProduct(productId.id, formData);
       setOpen(false);
-      toast.success("Product updated");
+      // toast.success("Product updated");
     } catch (error) {
       console.error("Failed to update product:", error);
     }

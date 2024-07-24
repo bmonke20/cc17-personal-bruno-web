@@ -15,9 +15,9 @@ export default function AdminProduct() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await productApi.getAllProduct();
-        // console.log("Fetched Products: ", response);
-        setProducts(response.data);
+        const res = await productApi.getAllProduct();
+        // console.log("Fetched Products: ", res);
+        setProducts(res.data);
       } catch (err) {
         console.log("Fetch Error", err);
       }
@@ -28,28 +28,28 @@ export default function AdminProduct() {
 
   const handleAddProduct = async (newProduct) => {
     try {
-      const response = await productApi.createProduct(newProduct);
-      setProducts((prevProducts) => [...prevProducts, response.data]);
+      const res = await productApi.createProduct(newProduct);
+      setProducts((prevProducts) => [...prevProducts, res.data]);
       toast.success("Product added successfully");
       setOpen(false);
     } catch (error) {
       console.error("Failed to add product:", error);
-      toast.error("Failed to add product");
+      // toast.error("Failed to add product");
     }
   };
 
   const handleUpdateProduct = async (id, updatedProduct) => {
     try {
-      const response = await productApi.updateProduct(id, updatedProduct);
-      console.log("Product updated successfully:", response.data);
+      const res = await productApi.updateProduct(id, updatedProduct);
+      console.log("Product updated successfully:", res.data);
       const updatedProducts = products.map((product) =>
-        product.id === response.data.id ? response.data : product
+        product.id === res.data.id ? res.data : product
       );
       setProducts(updatedProducts);
-      toast.success("Product updated");
+      // toast.success("Product updated");
     } catch (error) {
       console.error("Failed to update product:", error);
-      toast.error("Failed to update product");
+      // toast.error("Failed to update product");
     }
   };
 
@@ -60,7 +60,7 @@ export default function AdminProduct() {
       toast.success("Delete Product success");
     } catch (err) {
       console.log(err);
-      toast.error("Failed to delete product");
+      // toast.error("Failed to delete product");
     }
   };
 

@@ -4,7 +4,7 @@ import TopPage from "../userPages/ProductPage/TopPage";
 import BottomPage from "../userPages/ProductPage/BottomPage";
 import AccessoriesPage from "../userPages/ProductPage/Accessories";
 import ProductPage from "../userPages/ProductPage/ProductPage";
-import PaymentPage from "../userPages/PaymentPage/PaymentPage";
+// import PaymentPage from "../userPages/PaymentPage/PaymentPage";
 import ProfilePage from "../userPages/ProfilePage/ProfilePage";
 import CartPage from "../userPages/CartPage/CartPage";
 import AdminProduct from "../adminPages/Product/AdminProduct";
@@ -43,14 +43,14 @@ const router = createBrowserRouter([
           { path: "accessories", element: <AccessoriesPage /> },
         ],
       },
-      {
-        path: "payment",
-        element: (
-          <UserProtectRoute>
-            <PaymentPage />
-          </UserProtectRoute>
-        ),
-      },
+      // {
+      //   path: "payment",
+      //   element: (
+      //     <UserProtectRoute>
+      //       <PaymentPage />
+      //     </UserProtectRoute>
+      //   ),
+      // },
       {
         path: "profile/:userId",
         element: (

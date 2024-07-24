@@ -4,6 +4,7 @@ import Input from "../../component/Input";
 
 import Button from "../../component/Button";
 import { toast } from "react-toastify";
+import userApi from "../../apis/userApi";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -45,13 +46,9 @@ export default function ProfilePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put("/auth/update", form, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const res = await userApi.updateProfile();
 
-      setUser(response.data.user);
+      setUser(res.data.user);
       setEdit(false);
       toast.success("Update success");
     } catch (err) {
@@ -162,46 +159,4 @@ export default function ProfilePage() {
       </div>
     </div>
   );
-}
-
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-// const [showPassword, setShowPassword] = useState(false);
-{
-  /* <div>
-                <label className='text-[#415F6C]'>Change password:</label>
-                <div className='flex items-center'>
-                  <Input
-                    border='blue'
-                    type={showPassword ? "text" : "password"}
-                    name='password'
-                    value={form.password}
-                    onChange={handleChange}
-                  />
-                  <FontAwesomeIcon
-                    icon={showPassword ? faEyeSlash : faEye}
-                    className='ml-2 cursor-pointer text-gray-500'
-                    onClick={() => setShowPassword(!showPassword)}
-                  />
-                </div>
-              </div> */
-}
-{
-  /* <div>
-                <label className='text-[#415F6C]'>Confirm password:</label>
-                <div className='flex items-center'>
-                  <Input
-                    border='blue'
-                    type={showPassword ? "text" : "password"}
-                    name='confirmPassword'
-                    value={form.confirmPassword}
-                    onChange={handleChange}
-                  />
-                  <FontAwesomeIcon
-                    icon={showPassword ? faEyeSlash : faEye}
-                    className='ml-2 cursor-pointer text-gray-500'
-                    onClick={() => setShowPassword(!showPassword)}
-                  />
-                </div>
-              </div> */
 }

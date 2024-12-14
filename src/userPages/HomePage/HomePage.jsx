@@ -25,7 +25,7 @@ export default function HomePage() {
                   Let&apos;s Expore your Style !!
                 </h1>
                 <img
-                  src='public/clothes.jpg'
+                  src='src/icon/cloth.jpg'
                   alt='clothes promote'
                   className='w-2/5 rounded-3xl'
                 />
